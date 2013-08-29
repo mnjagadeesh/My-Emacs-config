@@ -1,5 +1,5 @@
-(setq user-mail-address "piraten@tuxproject.de")
-(setq user-full-name "tux-")
+(load-file "./.gnus.userdata.el") ; I won't expose my mail address here. :P
+
 (setq gnus-select-method '(nntp "news.piratenpartei.de"))
 
 (setq gnus-article-decode-mime-words t
