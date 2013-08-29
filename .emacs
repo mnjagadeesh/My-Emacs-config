@@ -17,7 +17,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+)
 
 
 ;; //////////////////////////////
@@ -43,3 +43,7 @@
 
 ;; Start Gnus with Emacs:
 (gnus)
+
+;; Add sane keybindings:
+(setq viper-mode t)
+(require 'viper)
