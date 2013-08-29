@@ -13,7 +13,7 @@
       gnus-agent-directory        (concat gnus-directory "agent/")
       nndraft-directory           (concat message-directory "drafts/")
       gnus-cache-directory        (concat gnus-directory "cache/")
-      gnus-cache-active-file      (concat gnus-directory "cache/active/")
+      gnus-cache-active-file      (concat gnus-directory "cache/active") ; no slash! this is a file, not a directory!
       gnus-article-save-directory (concat gnus-directory "save/")
       gnus-kill-files-directory   (concat gnus-directory "killfiles/")
       nnfolder-directory          (concat message-directory "archive/")
@@ -21,7 +21,7 @@
       gnus-mime-view-all-parts t	; View all the MIME parts in current
 
       gnus-always-read-dribble-file 1 ; always read auto-save file
-      gnus-group-default-list-level 6 ; list all subscribed groups
+      gnus-group-default-list-level 3 ; list all subscribed groups  ; TODO, this does nothing?!
 
       gnus-use-cache t
 
