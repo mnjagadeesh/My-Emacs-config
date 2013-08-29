@@ -31,4 +31,8 @@
    '(gnus-thread-sort-by-number
    (not gnus-thread-sort-by-date))) ; newest stuff on top
  
-(setq gnus-fetch-old-headers 'some) ; prevent teared threads
+(setq gnus-fetch-old-headers 'some) ; prevent teared threads by loading older but read postings
+
+; "<name> writes" is a bit boring.
+(setq message-citation-line-function 'message-insert-formatted-citation-line)
+(setq message-citation-line-format "%f schrob am %d. %b. %Y um %R Uhr dies:")
