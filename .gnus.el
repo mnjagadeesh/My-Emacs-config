@@ -8,10 +8,14 @@
 
       gnus-always-read-dribble-file 1 ; alreays read auto-save file
       
-					; article
+			; article
       gnus-ignored-mime-types '("text/x-vcard")
       gnus-buttonized-mime-types '("multipart/encrypted" "multipart/signed")
       gnus-unbuttonized-mime-types '("text/plain")
+
+      ; directories:
+      gnus-kill-files-directory '("~/.emacs.d/News/")
+      message-auto-save-directory '("~/.emacs.d/News/")
 
       gnus-treat-buttonize t		   ; Add buttons
       gnus-treat-buttonize-head 'head	   ; Add buttons to the head
@@ -26,19 +30,18 @@
   (turn-on-auto-fill))
 (add-hook 'message-mode-hook 'my-message-mode-setup)
 
-
 (setq gnus-thread-sort-functions '(gnus-thread-sort-by-number (not gnus-thread-sort-by-date))) ; newest stuff on top
  
 (setq gnus-fetch-old-headers 'some) ; prevent teared threads by loading older but read postings
 
 ; "<name> writes" is a bit boring.
 (setq message-citation-line-function 'message-insert-formatted-citation-line)
-(setq message-citation-line-format "%f schrob am %d. %b. %Y um %R Uhr dies:")
+(setq message-citation-line-format "%f schrob am %d. %b. %Y um %R Uhr dies:\n")
 
 (gnus-demon-add-handler 'gnus-demon-scan-news 2 t) ; grab new news every 2 minutes
 
 ; don't keep Gnus alive on shutdown
-(defadvice gnus-demon-scan-news (around gnus-demon-timeout activate) "Timeout for Gnus."(with-timeout (120 (message "Gnus timed out.")) ad-do-it))
+(defadvice gnus-demon-scan-news (around gnus-demon-timeout activate) "Timeout for Gnus." (with-timeout (120 (message "Gnus timed out.")) ad-do-it))
 
 ; I'd prefer text/plain messages, HTML mails are for sissies.
 (eval-after-load "mm-decode"
@@ -48,3 +51,5 @@
 
 ; also I'd prefer to have sane default headers
 (setq gnus-visible-headers "^From:\\|^Subject:\\|To:\\|^Cc:\\|^Date:\\|^Newsgroups:\\|^X-Newsreader:\\|^X-Mailer:")
+
+(setq gnutls-log-level 0) ; don't annoy me with GnuTLS messages. I don't need that for NNTP.
