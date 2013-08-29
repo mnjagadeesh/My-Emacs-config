@@ -18,7 +18,8 @@
       gnus-treat-emphasize t		   ; Emphasize text
       gnus-treat-strip-cr 'last		   ; Remove carriage returns
       gnus-treat-hide-headers 'head	   ; Hide headers
-      gnus-treat-hide-boring-headers 'head) ; -Hide boring headers
+      gnus-treat-hide-boring-headers 'head ; -Hide boring headers
+      gnus-outgoing-message-group nil) ; Don't save outgoing messages to a separate group
 
 (defun my-message-mode-setup ()
   (setq fill-column 72)
