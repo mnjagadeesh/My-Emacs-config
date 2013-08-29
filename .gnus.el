@@ -10,18 +10,13 @@
       gnus-directory "~/.emacs.d/News/"
       message-directory "~/.emacs.d/Mail/"
 
-      gnus-agent-directory (concat gnus-directory "agent/")
-      nndraft-directory (concat message-directory "drafts/")
-      gnus-cache-directory (concat gnus-directory "cache/")
-      gnus-cache-active-file (concat gnus-directory "cache/active/")
+      gnus-agent-directory        (concat gnus-directory "agent/")
+      nndraft-directory           (concat message-directory "drafts/")
+      gnus-cache-directory        (concat gnus-directory "cache/")
+      gnus-cache-active-file      (concat gnus-directory "cache/active/")
       gnus-article-save-directory (concat gnus-directory "save/")
-      gnus-kill-files-directory (concat gnus-directory "killfiles/")
-      
-      gnus-message-archive-method
-      '(nnfolder "archive"
-         (nnfolder-directory    (concat message-directory "archive/"))
-         (nnfolder-active-file  (concat message-directory "archive/active/"))
-         (nnfolder-get-new-mail nil))
+      gnus-kill-files-directory   (concat gnus-directory "killfiles/")
+      nnfolder-directory          (concat message-directory "archive/")
 
       gnus-mime-view-all-parts t	; View all the MIME parts in current
 
