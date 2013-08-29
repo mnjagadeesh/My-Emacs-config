@@ -4,25 +4,46 @@
 
 (setq gnus-article-decode-mime-words t
       gnus-article-decode-charset 1
+      gnus-agent t
+
+      ; don't spam my ~ with bogus folders!
+      gnus-directory "~/.emacs.d/News/"
+      message-directory "~/.emacs.d/Mail/"
+
+      gnus-agent-directory (concat gnus-directory "agent/")
+      nndraft-directory (concat message-directory "drafts/")
+      gnus-cache-directory (concat gnus-directory "cache/")
+      gnus-cache-active-file (concat gnus-directory "cache/active/")
+      gnus-article-save-directory (concat gnus-directory "save/")
+      gnus-kill-files-directory (concat gnus-directory "killfiles/")
+      
+      gnus-message-archive-method
+      '(nnfolder "archive"
+         (nnfolder-directory    (concat message-directory "archive/"))
+         (nnfolder-active-file  (concat message-directory "archive/active/"))
+         (nnfolder-get-new-mail nil))
+
       gnus-mime-view-all-parts t	; View all the MIME parts in current
 
-      gnus-always-read-dribble-file 1 ; alreays read auto-save file
-      
-			; article
+      gnus-always-read-dribble-file 1 ; always read auto-save file
+      gnus-group-default-list-level 6 ; list all subscribed groups
+
+      gnus-use-cache t
+
       gnus-ignored-mime-types '("text/x-vcard")
       gnus-buttonized-mime-types '("multipart/encrypted" "multipart/signed")
       gnus-unbuttonized-mime-types '("text/plain")
 
-      ; directories:
-      gnus-kill-files-directory '("~/.emacs.d/News/")
-      message-auto-save-directory '("~/.emacs.d/News/")
-
       gnus-treat-buttonize t		   ; Add buttons
       gnus-treat-buttonize-head 'head	   ; Add buttons to the head
       gnus-treat-emphasize t		   ; Emphasize text
+      gnus-treat-display-smileys t ; Use Smilies
       gnus-treat-strip-cr 'last		   ; Remove carriage returns
       gnus-treat-hide-headers 'head	   ; Hide headers
+
+      gnus-boring-article-headers '(empty followup-to newsgroups many-to reply-to)
       gnus-treat-hide-boring-headers 'head ; -Hide boring headers
+
       gnus-outgoing-message-group nil) ; Don't save outgoing messages to a separate group
 
 (defun my-message-mode-setup ()
@@ -50,6 +71,7 @@
       (add-to-list 'mm-discouraged-alternatives "text/richtext")))
 
 ; also I'd prefer to have sane default headers
-(setq gnus-visible-headers "^From:\\|^Subject:\\|To:\\|^Cc:\\|^Date:\\|^Newsgroups:\\|^X-Newsreader:\\|^X-Mailer:")
+(setq gnus-visible-headers "^From:\\|^Subject:\\|To:\\|^Cc:\\|^Date:\\|^Newsgroups:\\|^X-Newsreader:\\|^X-Mailer:"
+      gnus-sorted-header-list gnus-visible-headers)
 
 (setq gnutls-log-level 0) ; don't annoy me with GnuTLS messages. I don't need that for NNTP.
