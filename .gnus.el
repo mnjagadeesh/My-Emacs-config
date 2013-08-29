@@ -16,7 +16,6 @@
       gnus-treat-buttonize t		   ; Add buttons
       gnus-treat-buttonize-head 'head	   ; Add buttons to the head
       gnus-treat-emphasize t		   ; Emphasize text
-      gnus-treat-fill-article nil	   ; Fill the article
       gnus-treat-strip-cr 'last		   ; Remove carriage returns
       gnus-treat-hide-headers 'head	   ; Hide headers
       gnus-treat-hide-boring-headers 'head) ; -Hide boring headers
