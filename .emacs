@@ -29,6 +29,8 @@
   (w32-send-sys-command 61488)
 )
 
+(setq transient-mark-mode t)  ; sichtbare Markierung von Text
+
 ;; Add the MELPA repository:
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -54,4 +56,11 @@
 ;;   NOTE: this requires the Evil package from MELPA!
 ;;         M-x package-install <RET> evil <RET>
 (require 'evil)
-(evil-mode 1)
+(evil-mode t)
+
+;; Load interactively-do-things mode:
+(require 'ido)
+(ido-mode t)
+
+;; now, with ido, we can have an interactive M-x mode :-)
+(global-set-key "\M-x" (lambda () (interactive) (call-interactively (intern (ido-completing-read "M-x "(all-completions "" obarray 'commandp))))))

@@ -38,6 +38,13 @@
 
       gnutls-log-level 0 ; don't annoy me with GnuTLS messages. I don't need that for NNTP.
 
+      ; better summary line in the group overview
+      ; inspired by http://eschulte.github.io/emacs-starter-kit/starter-kit-gnus.html
+      gnus-sum-thread-tree-single-indent "* "
+      gnus-sum-thread-tree-single-leaf "+-> "
+      gnus-summary-display-arrow t
+      gnus-summary-line-format "%0{%U%R%z%}%3{│%} %1{%d%} %3{│%}  %4{%-20,20f%}  %3{│%} %1{%B%}%s\n"
+
       gnus-message-archive-group  nil  ; Don't use archiving
       gnus-outgoing-message-group nil) ; Don't save outgoing messages
 
@@ -51,6 +58,8 @@
 (setq message-citation-line-format "%N schrob am %d. %b. %Y um %R Uhr dies:\n") ; %N = (real name, else mail address)
 
 (gnus-demon-add-handler 'gnus-demon-scan-news 2 t) ; grab new news every 2 minutes
+
+(add-hook 'gnus-article-display-hook 'gnus-article-highlight-citation t) ; highlight quotes
 
 ; don't keep Gnus alive on shutdown
 (defadvice gnus-demon-scan-news (around gnus-demon-timeout activate) "Timeout for Gnus." (with-timeout (120 (message "Gnus timed out.")) ad-do-it))
