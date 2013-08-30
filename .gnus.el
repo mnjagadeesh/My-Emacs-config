@@ -62,7 +62,7 @@
       (add-to-list 'mm-discouraged-alternatives "text/richtext")))
 
 ; also I'd prefer to have sane default headers
-(setq gnus-visible-headers "^From:\\|^Subject:\\|To:\\|^Cc:\\|^Date:\\|^Newsgroups:\\|^X-Newsreader:\\|^X-Mailer:"
+(setq gnus-visible-headers '("^From:\\|^Subject:\\|To:\\|^Cc:\\|^Date:\\|^Newsgroups:\\|^X-Newsreader:\\|^X-Mailer:")
       gnus-sorted-header-list gnus-visible-headers)
 
 ; list all groups, not only the unread ones, in case I want to post something to them...
