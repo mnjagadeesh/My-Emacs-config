@@ -29,6 +29,12 @@
   (w32-send-sys-command 61488)
 )
 
+;; Add the MELPA repository:
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+(when (not package-archive-contents) (package-refresh-contents))
+
 ;; I prefer my backups sorted elsewhere
 ;; - taken from http://superuser.com/questions/236883/why-does-emacs-create-a-file-that-starts-with
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
@@ -45,5 +51,7 @@
 (gnus)
 
 ;; Add sane keybindings:
-(setq viper-mode t)
-(require 'viper)
+;;   NOTE: this requires the Evil package from MELPA!
+;;         M-x package-install <RET> evil <RET>
+(require 'evil)
+(evil-mode 1)
