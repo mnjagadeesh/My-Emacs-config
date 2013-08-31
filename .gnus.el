@@ -45,6 +45,10 @@
       gnus-summary-display-arrow t
       gnus-summary-line-format "%0{%U%R%z%}%3{│%} %1{%d%} %3{│%}  %4{%-20,20f%}  %3{│%} %1{%B%}%s\n"
 
+      ; better group lines too (no news server display & stuff)
+      ; inspired by http://www.sopos.org/olli/?gnus
+      gnus-group-line-format "%M\%S\%p\%P\%5y: %(%-40,40G%)\n"
+
       gnus-message-archive-group  nil  ; Don't use archiving
       gnus-outgoing-message-group nil) ; Don't save outgoing messages
 
