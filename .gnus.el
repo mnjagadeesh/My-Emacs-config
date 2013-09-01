@@ -68,9 +68,9 @@
 ; don't keep Gnus alive on shutdown
 (defadvice gnus-demon-scan-news (around gnus-demon-timeout activate) "Timeout for Gnus." (with-timeout (120 (message "Gnus timed out.")) ad-do-it))
 
-; I'd prefer text/plain messages, HTML mails are for sissies.
+; I'd prefer text/plain messages (with inline attachments), HTML mails are for sissies.
 (eval-after-load "mm-decode"
- '(progn 
+ '(progn
       (add-to-list 'mm-discouraged-alternatives "text/html")
       (add-to-list 'mm-discouraged-alternatives "text/richtext")))
 
