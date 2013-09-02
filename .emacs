@@ -26,10 +26,14 @@
 ;(cua-mode t)             ; enable usual Ctrl+X/C/V/Z behavior
 (delete-selection-mode 1) ; delete selected text when typing
 (global-linum-mode 1)     ; enable line numbers
+(tool-bar-mode -1)        ; no toolbar
 
 ;; Use the OS clipboard:
 (setq x-select-enable-clipboard t)
 (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+
+;; "Yes or no"? "Y or n"!
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Add the MELPA repository:
 (require 'package)
@@ -52,41 +56,63 @@
 ;; Start Gnus with Emacs:
 (gnus)
 
-;; Load interactively-do-things mode:
-(require 'ido)
-(ido-mode t)
+;; Build an MRU list:
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
-;; now, with ido, we can have an interactive M-x mode :-)
-(global-set-key "\M-x"
-  (lambda ()
-    (interactive) (call-interactively
-      (intern
-        (ido-completing-read "M-x "
-          (all-completions "" obarray 'commandp))))))
+;; Assume new files as modified:
+(add-hook 'find-file-hooks 'assume-new-is-modified)
+(defun assume-new-is-modified ()
+  (when (not (file-exists-p (buffer-file-name)))
+    (set-buffer-modified-p t)))
 
-(setq ido-enable-flex-matching t)
-(setq ido-create-new-buffer 'always)
+;; Create (C)Tags (requires Exuberant CTags in <PATH>):
+(defun make-ctags ()
+  "compile ctags for the current project"
+  (interactive)
+  (compile "ctags -Re"))
 
 
 ;; //////////////////////////////
 
 ;; ADDITIONS FROM MELPA:
 
-;; Add Twitter support:
+;; Add Twitter support (now that's critical!):
 (require 'twittering-mode)              ; requires the twittering-mode package.
 (setq twittering-use-master-password t)
 (setq twittering-icon-mode t)           ; Show icons
 (setq twittering-url-show-status nil)   ; Keeps the echo area from showing all the http processes
 
-;; Add sane keybindings:
-(require 'evil)                         ; requires the evil package.
-(evil-mode t)
 
-;; Add sane document switching:
-(require 'tabbar)                       ; requires the tabbar package.
-(tabbar-mode t)
+;; Add sane (Vim) keybindings (disabled for now because it breaks stuff):
+;(require 'evil)                        ; requires the evil package.
+;(evil-mode t)
 
-(setq tabbar-ruler-global-tabbar t)     ; enable tabbar
-(setq tabbar-ruler-popup-toolbar t)     ; enable popup-toolbar
-(require 'cl)                           ; required for tabbar-ruler
-(require 'tabbar-ruler)                 ; requires the tabbar-ruler and the tabbar packages.
+
+;; Add sane document switching (disabled for now due to UI horrors):
+;(require 'tabbar)                       ; requires the tabbar package.
+;(tabbar-mode t)
+;
+;(setq tabbar-ruler-global-tabbar t)     ; enable tabbar
+;;(setq tabbar-ruler-popup-toolbar t)    ; enable popup-toolbar
+;(require 'cl)                           ; required for tabbar-ruler
+;(require 'tabbar-ruler)                 ; requires the tabbar-ruler and the tabbar packages.
+
+
+;; Enable easier multi-line editing:
+(require 'multiple-cursors)              ; requires multiple-cursors
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)            ; C-S-c (twice) converts selected lines into cursors
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)           ; C-> marks the next line accordingly
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)       ; C-< marks the previous line accordingly
+(global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click) ; multi-line editing by C-S-click
+
+
+;; Add a Sublime-Text-like GoTo mode (better than ido ;-)):
+(require 'helm)                          ; requires the helm package.
+(global-set-key (kbd "C-c h") 'helm-mini)
+(helm-mode 1)
+
+(eval-after-load "helm-regexp"
+  '(helm-attrset 'follow 1 helm-source-moccur))
