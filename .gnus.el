@@ -75,10 +75,65 @@
       (add-to-list 'mm-discouraged-alternatives "text/richtext")))
 
 ; also I'd prefer to have sane default headers
-(setq gnus-visible-headers '("^From:\\|^Subject:\\|To:\\|^Cc:\\|^Date:\\|^Newsgroups:\\|^X-Newsreader:\\|^X-Mailer:")
+(setq gnus-visible-headers '("^From:\\|^Subject:\\|To:\\|^Cc:\\|^Date:\\|^Newsgroups:\\|^User-Agent:\\|^X-Newsreader:\\|^X-Mailer:")
       gnus-sorted-header-list gnus-visible-headers)
 
 ; list all groups, not only the unread ones, in case I want to post something to them...
 ;(add-hook 'gnus-started-hook 'gnus-group-list-all-groups)
 ;(add-hook 'gnus-summary-exit-hook 'gnus-group-list-all-groups)
 (setq gnus-permanently-visible-groups ".*") ; more elegant method
+
+(gnus-delay-initialize) ; ;-)
+
+; BBDB (address book) setup, requiring the BBDB package (of course) from MELPA.
+(setq bbdb-file "~/.emacs.d/bbdb")
+
+;; load bbdb
+(require 'bbdb)
+
+;; initialization
+(bbdb-initialize 'gnus 'message)
+(bbdb-mua-auto-update-init 'gnus 'message)
+
+;; size of the bbdb popup
+(setq bbdb-pop-up-window-size 10)
+
+;; What do we do when invoking bbdb interactively
+(setq bbdb-mua-update-interactive-p '(query . create))
+
+;; Make sure we look at every address in a message and not only the
+;; first one
+(setq bbdb-message-all-addresses t)
+
+;; use ; on a message to invoke bbdb interactively
+(add-hook
+ 'gnus-summary-mode-hook
+ (lambda ()
+   (define-key gnus-summary-mode-map (kbd ";") 'bbdb-mua-edit-field)
+))
+
+; reconfigure buffer positions for a wider screen
+(gnus-add-configuration
+ '(summary
+   (horizontal 1.0
+           (vertical 1.0 (group 0.25) (summary 1.0 point)))))
+(gnus-add-configuration
+ '(article
+   (horizontal 1.0
+           (vertical 0.45 (group 0.25) (summary 1.0 point) ("*BBDB*" 0.15))
+           (vertical 1.0 (article 1.0)))))
+(gnus-add-configuration
+ '(edit-form
+   (horizontal 1.0
+           (vertical 0.45 (group 0.25) (edit-form 1.0 point) ("*BBDB*" 0.15))
+           (vertical 1.0 (article 1.0)))))
+(gnus-add-configuration
+ '(edit-score
+   (horizontal 1.0
+           (vertical 0.45 (group 0.25) (edit-score 1.0 point) ("*BBDB*" 0.15))
+           (vertical 1.0 (article 1.0)))))
+(gnus-add-configuration
+ '(score-trace
+   (horizontal 1.0
+           (vertical 0.45 (group 0.25) (score-trace 1.0 point) ("*BBDB*" 0.15))
+           (vertical 1.0 (article 1.0)))))
