@@ -71,6 +71,7 @@
 
 ;; Highlight matching parens:
 (show-paren-mode t)
+(setq show-paren-delay 0) ; no delay, damnit!
 
 ;; Column numbers ftw!
 (setq column-number-mode t)
@@ -86,6 +87,23 @@
 (defun assume-new-is-modified ()
   (when (not (file-exists-p (buffer-file-name)))
     (set-buffer-modified-p t)))
+
+;; Use M-/ to (un)comment a line/region:
+(global-set-key (kbd "M-/") 'comment-or-uncomment-region-or-line)
+(defmacro allow-line-as-region-for-function (orig-function)
+  `(defun ,(intern (concat (symbol-name orig-function) "-or-line")) ()
+     ,(format "Like `%s', but acts on the current line if mark is not active." orig-function)
+     (interactive)
+     (if mark-active
+         (call-interactively (function ,orig-function))
+       (save-excursion
+         ;; define a region (temporarily) -- so any C-u prefixes etc. are preserved.
+         (beginning-of-line)
+         (set-mark (point))
+         (end-of-line)
+         (call-interactively (function ,orig-function))))))
+(unless (fboundp 'comment-or-uncomment-region-or-line)
+  (allow-line-as-region-for-function comment-or-uncomment-region))
 
 ;; Use C-l to jump to a line:
 (global-set-key (kbd "C-l") 'goto-line)
@@ -106,6 +124,10 @@
 (global-set-key (kbd "C-a") 'simulate-st-goto-home)
 (global-set-key [home] 'simulate-st-goto-home)
 
+;; Remap M to C-x C-m so the left hand won't die after two days of real work:
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command) ; fallback for fast-typing.
+
 ;; Create (C)Tags (requires Exuberant CTags in <PATH>):
 (defun make-ctags ()
   "compile ctags for the current project or file"
@@ -121,7 +143,7 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
-(package-refresh-contents) ; always do that! :)
+(unless package-archive-contents (package-refresh-contents)) ; note to self: call that sometimes
 
 
 ;; Add Twitter support (now that's critical!):
@@ -178,4 +200,4 @@
 ;; LASTLY, START STUFF:
 
 ;; Start Gnus with Emacs:
-(gnus)
+;(gnus)
