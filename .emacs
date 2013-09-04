@@ -4,10 +4,19 @@
 ;; (edited with the built-in theme editor :-))
 
 (custom-set-variables
- '(ansi-color-names-vector ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
- '(canlock-password "de42867bdc0548f4d88062604f49c8368a2551d7")
- '(hl-paren-colors (quote ("orange" "yellow" "greenyellow" "green" "springgreen" "cyan" "slateblue" "magenta" "purple")))
- '(custom-enabled-themes (quote (deeper-blue))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(canlock-password "a83d5f7c7c23b017f77078710aab86597acb752a")
+ '(hl-paren-colors (quote ("orange" "yellow" "greenyellow" "green" "springgreen" "cyan" "slateblue" "magenta" "purple"))))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 
 ;; //////////////////////////////
@@ -22,31 +31,20 @@
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;; Start Emacs maximized on Windows:
+;; OS-specific tweaks:
 (if (eq system-type 'windows-nt)
-  (w32-send-sys-command 61488)
-  (set-face-attribute 'default nil :family "Consolas" :height 100) ; neat default font
+  (progn
+    (set-face-attribute 'default nil :family "Consolas" :height 100)
+    (w32-send-sys-command 61488)) ; do this after setting the font (will resize the window!)
+  ;; if not on Windows, use the OS clipboard (Windows-Emacs does that by default):
+  ;(progn
+  ;  (setq x-select-enable-clipboard t)
+  ;  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
 )
 
 ;; Make Emacs follow sane UI conventions:
-;(cua-mode t)             ; enable usual Ctrl+X/C/V/Z behavior
+;(cua-mode t)             ; enable usual Ctrl+X/C/V/Z behavior ; nah, that's lame
 (delete-selection-mode 1) ; delete selected text when typing
-
-;; Show line numbers only when jumping there:
-(global-set-key [remap goto-line] 'goto-line-with-feedback)
-
-(defun goto-line-with-feedback ()
-  "Show line numbers temporarily, while prompting for the line number input"
-  (interactive)
-  (unwind-protect
-      (progn
-        (linum-mode 1)
-        (goto-line (read-number "Goto line: ")))
-    (linum-mode -1)))
-
-;; Use the OS clipboard:
-(setq x-select-enable-clipboard t)
-(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
 
 ;; "Yes or no"? "Y or n"!
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -107,6 +105,18 @@
 
 ;; Use C-l to jump to a line:
 (global-set-key (kbd "C-l") 'goto-line)
+
+;; Show line numbers only when jumping there:
+(global-set-key [remap goto-line] 'goto-line-with-feedback)
+
+(defun goto-line-with-feedback ()
+  "Show line numbers temporarily, while prompting for the line number input"
+  (interactive)
+  (unwind-protect
+      (progn
+        (linum-mode 1)
+        (goto-line (read-number "Goto line: ")))
+    (linum-mode -1)))
 
 ;; Use M-j to join lines:
 (global-set-key (kbd "M-j")
@@ -184,6 +194,12 @@
 (eval-after-load "helm-regexp"
   '(helm-attrset 'follow 1 helm-source-moccur))
 
+(setq helm-display-function              ; Load helm where it fits better
+      (lambda (buf)
+        (split-window-horizontally)
+        (other-window 1)
+        (switch-to-buffer buf)))
+
 
 ;; Add a sane tab completion:
 (require 'smart-tab)                     ; requires the smart-tab package.
@@ -193,6 +209,10 @@
 ;; Add snippets:
 (require 'yasnippet)                     ; requires the yasnippet package.
 (yas-global-mode t)
+
+
+;; Change colors:
+(load-theme 'zenburn t)                  ; requires zenburn-theme.
 
 
 ;; //////////////////////////////
