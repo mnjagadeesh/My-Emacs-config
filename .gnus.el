@@ -2,7 +2,7 @@
 
 (setq gnus-article-decode-mime-words t
       gnus-article-decode-charset 1
-      gnus-agent t
+ ;    gnus-agent t  ; useful only if unplugged from the net (which rarely is the case)
 
       ; don't spam my ~ with bogus folders!
       gnus-directory "~/.emacs.d/News/"
@@ -101,7 +101,7 @@
 ;; What do we do when invoking bbdb interactively
 (setq bbdb-mua-update-interactive-p '(query . create))
 
-;; Make sure we look at every address in a message and not only the
+;; make sure we look at every address in a message and not only the
 ;; first one
 (setq bbdb-message-all-addresses t)
 
@@ -111,6 +111,10 @@
  (lambda ()
    (define-key gnus-summary-mode-map (kbd ";") 'bbdb-mua-edit-field)
 ))
+
+;; interactively add footnotes
+ (autoload 'footnote-mode "footnote" nil t)
+ (add-hook 'message-mode-hook 'footnote-mode)
 
 ; reconfigure buffer positions for a wider screen
 (gnus-add-configuration
