@@ -49,6 +49,11 @@
 ;; "Yes or no"? "Y or n"!
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;; Enable basic syntax highlighting for "everything":
+(require 'generic-x)
+(add-to-list 'auto-mode-alist '("\\.ini\\'" . conf-mode)) ; .ini files should have conf-mode
+(add-to-list 'auto-mode-alist '("\\.iss\\'" . conf-mode)) ; .iss files should have conf-mode
+
 ;; I prefer my backups sorted elsewhere
 ;; - taken from http://superuser.com/questions/236883/why-does-emacs-create-a-file-that-starts-with
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
@@ -108,7 +113,6 @@
 
 ;; Show line numbers only when jumping there:
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
-
 (defun goto-line-with-feedback ()
   "Show line numbers temporarily, while prompting for the line number input"
   (interactive)
@@ -130,7 +134,6 @@
   (let ((col (current-column)))
     (back-to-indentation)
     (if (= col (current-column)) (move-beginning-of-line nil))))
-
 (global-set-key (kbd "C-a") 'simulate-st-goto-home)
 (global-set-key [home] 'simulate-st-goto-home)
 
@@ -153,10 +156,19 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
-(unless package-archive-contents (package-refresh-contents)) ; note to self: call that sometimes
+(unless package-archive-contents (package-refresh-contents))
 
 
-;; Add Twitter support (now that's critical!):
+;; Quick access to the package updater:
+(defun update-packages ()
+  (interactive)
+  (package-refresh-contents)
+  (package-list-packages)
+  (package-menu-mark-upgrades)
+  (package-menu-execute))
+
+
+;; Add Twitter support (now that's critical! ;-)):
 (require 'twittering-mode)              ; requires the twittering-mode package.
 (setq twittering-use-master-password t)
 (setq twittering-icon-mode t)           ; Show icons
@@ -173,7 +185,6 @@
 ;(tabbar-mode t)
 ;
 ;(setq tabbar-ruler-global-tabbar t)     ; enable tabbar
-;;(setq tabbar-ruler-popup-toolbar t)    ; enable popup-toolbar
 ;(require 'cl)                           ; required for tabbar-ruler
 ;(require 'tabbar-ruler)                 ; requires the tabbar-ruler and the tabbar packages.
 
