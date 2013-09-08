@@ -54,8 +54,7 @@
 (add-to-list 'auto-mode-alist '("\\.ini\\'" . conf-mode)) ; .ini files should have conf-mode
 (add-to-list 'auto-mode-alist '("\\.iss\\'" . conf-mode)) ; .iss files should have conf-mode
 
-;; I prefer my backups sorted elsewhere
-;; - taken from http://superuser.com/questions/236883/why-does-emacs-create-a-file-that-starts-with
+;; I prefer my backups sorted elsewhere:
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
       backup-by-copying      t  ; Don't de-link hard links
       version-control        t  ; Use version numbers on backups
@@ -63,9 +62,25 @@
       kept-new-versions      5  ; how many of the newest versions to keep
       kept-old-versions      5) ; and how many of the old
 
+;; While I'd like Emacs to backup files I am working on, I would prefer them to be stored
+;; outside the original directories so they won't pollute my file liste:
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
 ;; Remove that splash screen thingy:
 (setq inhibit-splash-screen t)   ; no "this is Emacs, click here to read that again"
 (setq inhibit-startup-message t) ; *sigh*
+
+;; TRAMP mode is probably preferring SSH (for most of my servers):
+(setq tramp-default-method "ssh")
+
+;; Use spaces, not tabs for indentation:
+(setq-default indent-tabs-mode nil)
+
+;; Wrap words at their boundaries, not anywhere else:
+(setq-default word-wrap t)
+
+;; Treat display lines as actual lines:
+;(global-visual-line-mode t)
 
 ;; Store current point positions between sessions
 (require 'saveplace)
@@ -83,7 +98,7 @@
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+; (global-set-key "\C-x\ \C-r" 'recentf-open-files)  ; Helm is used, see below
 
 ;; Assume new files as modified:
 (add-hook 'find-file-hooks 'assume-new-is-modified)
@@ -200,11 +215,10 @@
 ;; Add a Sublime-Text-like GoTo mode (better than ido ;-)):
 (require 'helm)                          ; requires the helm package.
 (global-set-key (kbd "C-c h") 'helm-mini)
+(global-set-key "\C-x\ \C-r" 'helm-recentf)
 (helm-mode 1)
 
-(eval-after-load "helm-regexp"
-  '(helm-attrset 'follow 1 helm-source-moccur))
-
+(eval-after-load "helm-regexp" '(helm-attrset 'follow 1 helm-source-moccur))
 (setq helm-display-function              ; Load helm where it fits better
       (lambda (buf)
         (split-window-horizontally)
@@ -220,6 +234,11 @@
 ;; Add snippets:
 (require 'yasnippet)                     ; requires the yasnippet package.
 (yas-global-mode t)
+
+
+;; Add a neat sidebar for easier directory/project browsing:
+(require 'sr-speedbar)                   ; requires the sr-speedbar package.
+(global-set-key (kbd "M-s") 'sr-speedbar-toggle)   ; this shortcut was still free.
 
 
 ;; Change colors:
