@@ -34,7 +34,8 @@
 
       gnus-boring-article-headers '(empty followup-to newsgroups many-to reply-to)
       gnus-treat-hide-boring-headers 'head ; -Hide boring headers
-      gnus-fetch-old-headers 'some         ; prevent teared threads by loading older but read postings
+      ;gnus-fetch-old-headers 'some        ; prevent teared threads by loading older but read postings
+      gnus-fetch-old-headers 250       ; this should achieve the same result, without the excessive waiting for some groups...
 
       gnutls-log-level 0 ; don't annoy me with GnuTLS messages. I don't need that for NNTP.
 
@@ -57,7 +58,7 @@
   (turn-on-auto-fill))
 (add-hook 'message-mode-hook 'my-message-mode-setup)
  
-; "<name> writes:" is a bit boring.
+;; "<name> writes:" is a bit boring.
 (setq message-citation-line-function 'message-insert-formatted-citation-line)
 (setq message-citation-line-format "%N schrob am %d. %b. %Y um %R Uhr dies:\n") ; %N = (real name, else mail address)
 
@@ -65,27 +66,27 @@
 
 (add-hook 'gnus-article-display-hook 'gnus-article-highlight-citation t) ; highlight quotes
 
-; don't keep Gnus alive on shutdown
+;; don't keep Gnus alive on shutdown
 (defadvice gnus-demon-scan-news (around gnus-demon-timeout activate) "Timeout for Gnus." (with-timeout (120 (message "Gnus timed out.")) ad-do-it))
 
-; I'd prefer text/plain messages (with inline attachments), HTML mails are for sissies.
+;; I'd prefer text/plain messages (with inline attachments), HTML mails are for sissies.
 (eval-after-load "mm-decode"
  '(progn
       (add-to-list 'mm-discouraged-alternatives "text/html")
       (add-to-list 'mm-discouraged-alternatives "text/richtext")))
 
-; also I'd prefer to have sane default headers
+;; also I'd prefer to have sane default headers
 (setq gnus-visible-headers '("^From:\\|^Subject:\\|To:\\|^Cc:\\|^Date:\\|^Newsgroups:\\|^User-Agent:\\|^X-Newsreader:\\|^X-Mailer:")
       gnus-sorted-header-list gnus-visible-headers)
 
-; list all groups, not only the unread ones, in case I want to post something to them...
+;; list all groups, not only the unread ones, in case I want to post something to them...
 ;(add-hook 'gnus-started-hook 'gnus-group-list-all-groups)
 ;(add-hook 'gnus-summary-exit-hook 'gnus-group-list-all-groups)
 (setq gnus-permanently-visible-groups ".*") ; more elegant method
 
 (gnus-delay-initialize) ; ;-)
 
-; BBDB (address book) setup, requiring the BBDB package (of course) from MELPA.
+;; BBDB (address book) setup, requiring the BBDB package (of course) from MELPA.
 (setq bbdb-file "~/.emacs.d/bbdb")
 
 ;; load bbdb
@@ -106,37 +107,36 @@
 (setq bbdb-message-all-addresses t)
 
 ;; use ; on a message to invoke bbdb interactively
-(add-hook
- 'gnus-summary-mode-hook
+(add-hook 'gnus-summary-mode-hook
  (lambda ()
    (define-key gnus-summary-mode-map (kbd ";") 'bbdb-mua-edit-field)
 ))
 
 ;; interactively add footnotes
- (autoload 'footnote-mode "footnote" nil t)
- (add-hook 'message-mode-hook 'footnote-mode)
+(autoload 'footnote-mode "footnote" nil t)
+(add-hook 'message-mode-hook 'footnote-mode)
 
-; reconfigure buffer positions for a wider screen
-(gnus-add-configuration
+;; reconfigure buffer positions for a wider screen
+(gnus-add-configuration  ; summary view
  '(summary
    (horizontal 1.0
            (vertical 1.0 (group 0.25) (summary 1.0 point)))))
-(gnus-add-configuration
+(gnus-add-configuration  ; article view
  '(article
    (horizontal 1.0
            (vertical 0.45 (group 0.25) (summary 1.0 point) ("*BBDB*" 0.15))
            (vertical 1.0 (article 1.0)))))
-(gnus-add-configuration
+(gnus-add-configuration  ; post new stuff
  '(edit-form
    (horizontal 1.0
            (vertical 0.45 (group 0.25) (edit-form 1.0 point) ("*BBDB*" 0.15))
            (vertical 1.0 (article 1.0)))))
-(gnus-add-configuration
+(gnus-add-configuration  ; score editing
  '(edit-score
    (horizontal 1.0
            (vertical 0.45 (group 0.25) (edit-score 1.0 point) ("*BBDB*" 0.15))
            (vertical 1.0 (article 1.0)))))
-(gnus-add-configuration
+(gnus-add-configuration  ; score tracing
  '(score-trace
    (horizontal 1.0
            (vertical 0.45 (group 0.25) (score-trace 1.0 point) ("*BBDB*" 0.15))
