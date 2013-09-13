@@ -46,8 +46,18 @@
 ;(cua-mode t)             ; enable usual Ctrl+X/C/V/Z behavior ; nah, that's lame
 (delete-selection-mode 1) ; delete selected text when typing
 
+;; Make Emacs FUCKING USE SANE ENCODINGS even on w32 where it seems to prefer ISO:
+(setq locale-coding-system 'utf-8-unix)
+(set-terminal-coding-system 'utf-8-unix)
+(set-keyboard-coding-system 'utf-8-unix)
+(set-selection-coding-system 'utf-8-unix)
+(prefer-coding-system 'utf-8-unix)
+
 ;; "Yes or no"? "Y or n"!
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;; ERC config:
+(load-file "~/.erc.userdata.el") ; don't expose my ZNC accounts to github :)
 
 ;; Enable basic syntax highlighting for "everything":
 (require 'generic-x)
@@ -229,6 +239,10 @@
 ;; Add a sane tab completion:
 (require 'smart-tab)                     ; requires the smart-tab package.
 (global-smart-tab-mode 1)
+
+
+;; Add dpaste support:
+(require 'dpaste_de)                     ; requires the dpaste_de package.
 
 
 ;; Add snippets:
