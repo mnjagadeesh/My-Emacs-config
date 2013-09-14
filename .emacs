@@ -175,6 +175,19 @@
 
 ;; //////////////////////////////
 
+;; ADDITIONS FROM NON-MELPA PACKAGES:
+
+;; nXhtml stuff (web development modes):
+;; # cd ~/.emacs.d ; git clone https://github.com/emacsmirror/nxhtml.git
+;; (Needs several fixes before being usable :-/)
+;(load-file "~/.emacs.d/nxhtml/autostart.el")
+;; Manual fixes for Emacs 24.x bugs:
+;(eval-after-load 'nxhtml '(nxhtml-toggle-visible-warnings))
+;(eval-after-load 'mumamo '(setq mumamo-per-buffer-local-vars (delq 'buffer-file-name mumamo-per-buffer-local-vars)))
+
+
+;; //////////////////////////////
+
 ;; ADDITIONS FROM MELPA:
 
 ;; Add the MELPA repository:
@@ -182,6 +195,25 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 (unless package-archive-contents (package-refresh-contents))
+
+
+;; Automatically install the packages I need (as I configure them below):
+(setq package-list '(
+  twittering-mode
+  evil
+  tabbar
+  tabbar-ruler
+  multiple-cursors
+  helm
+  smart-tab
+  dpaste_de
+  yasnippet
+  sr-speedbar
+  zenburn-theme
+))
+(dolist (package package-list)
+  (when (not (package-installed-p package))
+    (package-install package)))
 
 
 ;; Quick access to the package updater:
@@ -222,14 +254,16 @@
 (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click) ; multi-line editing by C-S-click
 
 
-;; Add a Sublime-Text-like GoTo mode (better than ido ;-)):
+;; Add a Sublime-Text-like GoTo mode:
 (require 'helm)                          ; requires the helm package.
 (global-set-key (kbd "C-c h") 'helm-mini)
 (global-set-key "\C-x\ \C-r" 'helm-recentf)
 (helm-mode 1)
 
+
+;; Load helm as a horizontal split buffer (always on the right side):
 (eval-after-load "helm-regexp" '(helm-attrset 'follow 1 helm-source-moccur))
-(setq helm-display-function              ; Load helm where it fits better
+(setq helm-display-function
       (lambda (buf)
         (split-window-horizontally)
         (other-window 1)
@@ -256,7 +290,7 @@
 
 
 ;; Change colors:
-(load-theme 'zenburn t)                  ; requires zenburn-theme.
+(load-theme 'zenburn t)                  ; requires the zenburn-theme package.
 
 
 ;; //////////////////////////////
