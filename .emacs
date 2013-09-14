@@ -162,7 +162,7 @@
 (global-set-key (kbd "C-a") 'simulate-st-goto-home)
 (global-set-key [home] 'simulate-st-goto-home)
 
-;; Remap M to C-x C-m so the left hand won't die after two days of real work:
+;; Remap M-x to C-x C-m so the left hand won't die after two days of real work:
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command) ; fallback for fast-typing.
 
@@ -197,20 +197,32 @@
 (unless package-archive-contents (package-refresh-contents))
 
 
-;; Automatically install the packages I need (as I configure them below):
+;; Automatically install the packages I need:
 (setq package-list '(
-  twittering-mode
-  evil
-  tabbar
-  tabbar-ruler
-  multiple-cursors
-  helm
-  smart-tab
-  dpaste_de
-  yasnippet
-  sr-speedbar
-  zenburn-theme
+  ; configured below:
+  twittering-mode   ; most important features first!
+  ;evil             ; Vim emulation (disabled for now)
+  ;tabbar           ; tab switching for Emacs (disabled for now)
+  ;tabbar-ruler     ; tab switching for Emacs (disabled for now)
+  multiple-cursors  ; multi-line editing made easier
+  helm              ; auto-completing popup system
+  smart-tab         ; tab completion and more
+  dpaste_de         ; put the current buffer to the web
+  yasnippet         ; easy snippet handling
+  sr-speedbar       ; sidebar as a buffer
+
+  ; color themes:
+  zenburn-theme     ; most eye-pleasant coding theme available
+
+  ; no need to configure here:
+  php-mode          ; PHP support
+  ahg               ; Mercurial support
+
+  ; Gnus extensions:
+  bbdb              ; Big Brother database
+  bbdb-ext          ; ... with extras
 ))
+
 (dolist (package package-list)
   (when (not (package-installed-p package))
     (package-install package)))
@@ -224,6 +236,10 @@
   (package-menu-mark-upgrades)
   (package-menu-execute))
 
+
+;; //////////////////////////////
+
+;; CONFIGURING THE MELPA PACKAGES:
 
 ;; Add Twitter support (now that's critical! ;-)):
 (require 'twittering-mode)              ; requires the twittering-mode package.
