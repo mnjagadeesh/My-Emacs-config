@@ -35,7 +35,9 @@
 (if (eq system-type 'windows-nt)
   (progn
     (set-face-attribute 'default nil :family "Consolas" :height 100)
-    (w32-send-sys-command 61488)) ; do this after setting the font (will resize the window!)
+    (w32-send-sys-command 61488) ; do this after setting the font (will resize the window!)
+    ; on Windows, I could need additional binaries (like astyle) and DLLs - I put them in a separate directory:
+    (setq exec-path (append exec-path (list (expand-file-name "~/.emacs.d/bin-addons")))))
   ;; if not on Windows, use the OS clipboard (Windows-Emacs does that by default):
   ;(progn
   ;  (setq x-select-enable-clipboard t)
@@ -73,8 +75,16 @@
       kept-old-versions      5) ; and how many of the old
 
 ;; While I'd like Emacs to backup files I am working on, I would prefer them to be stored
-;; outside the original directories so they won't pollute my file liste:
+;; outside the original directories so they won't pollute my file lists:
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
+;; Indent b0rked buffers completely anew:
+(defun reindent-buffer ()
+  (interactive)
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil)
+  (untabify (point-min) (point-max)))
+(global-set-key [f12] 'reindent-buffer)
 
 ;; Remove that splash screen thingy:
 (setq inhibit-splash-screen t)   ; no "this is Emacs, click here to read that again"
@@ -108,7 +118,7 @@
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
-; (global-set-key "\C-x\ \C-r" 'recentf-open-files)  ; Helm is used, see below
+; (global-set-key (kbd "C-x C-r") 'recentf-open-files)  ; Helm is used, see below
 
 ;; Assume new files as modified:
 (add-hook 'find-file-hooks 'assume-new-is-modified)
@@ -163,8 +173,8 @@
 (global-set-key [home] 'simulate-st-goto-home)
 
 ;; Remap M-x to C-x C-m so the left hand won't die after two days of real work:
-(global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-c\C-m" 'execute-extended-command) ; fallback for fast-typing.
+(global-set-key (kbd "C-x C-m") 'execute-extended-command)
+(global-set-key (kbd "C-c C-m") 'execute-extended-command) ; fallback for fast-typing.
 
 ;; Create (C)Tags (requires Exuberant CTags in <PATH>):
 (defun make-ctags ()
@@ -210,6 +220,7 @@
   dpaste_de         ; put the current buffer to the web
   yasnippet         ; easy snippet handling
   sr-speedbar       ; sidebar as a buffer
+  todotxt           ; todo.txt support
 
   ; color themes:
   zenburn-theme     ; most eye-pleasant coding theme available
@@ -273,7 +284,7 @@
 ;; Add a Sublime-Text-like GoTo mode:
 (require 'helm)                          ; requires the helm package.
 (global-set-key (kbd "C-c h") 'helm-mini)
-(global-set-key "\C-x\ \C-r" 'helm-recentf)
+(global-set-key (kbd "C-x C-r") 'helm-recentf)
 (helm-mode 1)
 
 
@@ -293,6 +304,11 @@
 
 ;; Add dpaste support:
 (require 'dpaste_de)                     ; requires the dpaste_de package.
+
+
+;; Add todo.txt support:
+(require 'todotxt)                       ; requires the todotxt package.
+(add-to-list 'auto-mode-alist '("\\todo.txt\\'" . todotxt-mode)) ; auto-mode todo.txt files
 
 
 ;; Add snippets:
