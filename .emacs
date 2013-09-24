@@ -224,7 +224,7 @@
   dpaste_de         ; put the current buffer to the web
   yasnippet         ; easy snippet handling
   sr-speedbar       ; sidebar as a buffer
-  znc-erc           ; ZNC for ERC
+  znc               ; ZNC for ERC
   todotxt           ; todo.txt support
 
   ; color themes:
