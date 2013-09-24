@@ -32,12 +32,16 @@
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 ;; OS-specific tweaks:
+(if (eq system-type 'darwin)
+    ;; I prefer cmd key for meta so Alt+[num] stays intact
+    (setq mac-command-modifier 'meta
+          mac-option-modifier nil)
+)
+
 (if (eq system-type 'windows-nt)
   (progn
     (set-face-attribute 'default nil :family "Consolas" :height 100)
-    (w32-send-sys-command 61488) ; do this after setting the font (will resize the window!)
-    ; on Windows, I could need additional binaries (like astyle) and DLLs - I put them in a separate directory:
-    (setq exec-path (append exec-path (list (expand-file-name "~/.emacs.d/bin-addons")))))
+    (w32-send-sys-command 61488)) ; do this after setting the font (will resize the window!)
   ;; if not on Windows, use the OS clipboard (Windows-Emacs does that by default):
   ;(progn
   ;  (setq x-select-enable-clipboard t)
@@ -220,6 +224,7 @@
   dpaste_de         ; put the current buffer to the web
   yasnippet         ; easy snippet handling
   sr-speedbar       ; sidebar as a buffer
+  znc-erc           ; ZNC for ERC
   todotxt           ; todo.txt support
 
   ; color themes:
@@ -319,6 +324,10 @@
 ;; Add a neat sidebar for easier directory/project browsing:
 (require 'sr-speedbar)                   ; requires the sr-speedbar package.
 (global-set-key (kbd "M-s") 'sr-speedbar-toggle)   ; this shortcut was still free.
+
+
+;; ERC config:
+(load-file "~/.erc.userdata.el") ; don't expose my ZNC accounts to github :)
 
 
 ;; Change colors:
