@@ -26,49 +26,57 @@
 ;; Start a server so emacsclients can later just connect to this Emacs:
 (server-start)
 
+
 ;; Goodbye, menubar! Goodbye, scrollbar! Goodbye, toolbar!
 (menu-bar-mode -1)
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+
 ;; OS-specific tweaks:
 (if (eq system-type 'darwin)
-    ;; I prefer cmd key for meta so Alt+[num] stays intact
-    (setq mac-command-modifier 'meta
-          mac-option-modifier nil)
-)
+   ;; On Mac OS, I prefer cmd key for meta so Alt+[num] stays intact
+   (setq mac-command-modifier 'meta
+         mac-option-modifier nil))
 
 (if (eq system-type 'windows-nt)
   (progn
+    ;; On Windows, I want a neater default font at least
     (set-face-attribute 'default nil :family "Consolas" :height 100)
-    (w32-send-sys-command 61488)) ; do this after setting the font (will resize the window!)
-  ;; if not on Windows, use the OS clipboard (Windows-Emacs does that by default):
-  ;(progn
-  ;  (setq x-select-enable-clipboard t)
-  ;  (setq interprogram-paste-function 'x-cut-buffer-or-selection-value))
-)
+    (w32-send-sys-command 61488))) ; do this after setting the font (will resize the window!)
+
 
 ;; Make Emacs follow sane UI conventions:
 ;(cua-mode t)             ; enable usual Ctrl+X/C/V/Z behavior ; nah, that's lame
 (delete-selection-mode 1) ; delete selected text when typing
 
-;; Make Emacs FUCKING USE SANE ENCODINGS even on w32 where it seems to prefer ISO:
+
+;; Make Emacs FUCKING USE SANE ENCODINGS:
+(set-language-environment 'utf-8-unix)
 (setq locale-coding-system 'utf-8-unix)
+(set-default-coding-systems 'utf-8-unix)
 (set-terminal-coding-system 'utf-8-unix)
-(set-keyboard-coding-system 'utf-8-unix)
-(set-selection-coding-system 'utf-8-unix)
+(unless (eq system-type 'windows-nt)
+  ; on Win32, cooperation between Emacs and other Unicode applications is weird.
+  ; let's avoid that.
+  (set-selection-coding-system 'utf-8-unix))
 (prefer-coding-system 'utf-8-unix)
+(prefer-coding-system 'utf-8-unix)
+
 
 ;; "Yes or no"? "Y or n"!
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+
 ;; ERC config:
 (load-file "~/.erc.userdata.el") ; don't expose my ZNC accounts to github :)
+
 
 ;; Enable basic syntax highlighting for "everything":
 (require 'generic-x)
 (add-to-list 'auto-mode-alist '("\\.ini\\'" . conf-mode)) ; .ini files should have conf-mode
 (add-to-list 'auto-mode-alist '("\\.iss\\'" . conf-mode)) ; .iss files should have conf-mode
+
 
 ;; I prefer my backups sorted elsewhere:
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
@@ -78,9 +86,11 @@
       kept-new-versions      5  ; how many of the newest versions to keep
       kept-old-versions      5) ; and how many of the old
 
+
 ;; While I'd like Emacs to backup files I am working on, I would prefer them to be stored
 ;; outside the original directories so they won't pollute my file lists:
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
 
 ;; Indent b0rked buffers completely anew:
 (defun reindent-buffer ()
@@ -90,33 +100,42 @@
   (untabify (point-min) (point-max)))
 (global-set-key [f12] 'reindent-buffer)
 
+
 ;; Remove that splash screen thingy:
 (setq inhibit-splash-screen t)   ; no "this is Emacs, click here to read that again"
 (setq inhibit-startup-message t) ; *sigh*
 
+
 ;; TRAMP mode is probably preferring SSH (for most of my servers):
 (setq tramp-default-method "ssh")
+
 
 ;; Use spaces, not tabs for indentation:
 (setq-default indent-tabs-mode nil)
 
+
 ;; Wrap words at their boundaries, not anywhere else:
 (setq-default word-wrap t)
 
+
 ;; Treat display lines as actual lines:
 ;(global-visual-line-mode t)
+
 
 ;; Store current point positions between sessions
 (require 'saveplace)
 (setq-default save-place t)
 (setq save-place-file (expand-file-name ".places" user-emacs-directory))
 
+
 ;; Highlight matching parens:
 (show-paren-mode t)
 (setq show-paren-delay 0) ; no delay, damnit!
 
+
 ;; Column numbers ftw!
 (setq column-number-mode t)
+
 
 ;; Build an MRU list:
 (require 'recentf)
@@ -124,11 +143,13 @@
 (setq recentf-max-menu-items 25)
 ; (global-set-key (kbd "C-x C-r") 'recentf-open-files)  ; Helm is used, see below
 
+
 ;; Assume new files as modified:
 (add-hook 'find-file-hooks 'assume-new-is-modified)
 (defun assume-new-is-modified ()
   (when (not (file-exists-p (buffer-file-name)))
     (set-buffer-modified-p t)))
+
 
 ;; Use M-/ to (un)comment a line/region:
 (global-set-key (kbd "M-/") 'comment-or-uncomment-region-or-line)
@@ -144,11 +165,14 @@
          (set-mark (point))
          (end-of-line)
          (call-interactively (function ,orig-function))))))
+
 (unless (fboundp 'comment-or-uncomment-region-or-line)
   (allow-line-as-region-for-function comment-or-uncomment-region))
 
+
 ;; Use C-l to jump to a line:
 (global-set-key (kbd "C-l") 'goto-line)
+
 
 ;; Show line numbers only when jumping there:
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
@@ -161,11 +185,13 @@
         (goto-line (read-number "Goto line: ")))
     (linum-mode -1)))
 
+
 ;; Use M-j to join lines:
 (global-set-key (kbd "M-j")
   (lambda ()
     (interactive)
     (join-line -1)))
+
 
 ;; Simulate Sublime Text's "Go to the beginning of the line" behavior:
 (defun simulate-st-goto-home ()
@@ -176,9 +202,11 @@
 (global-set-key (kbd "C-a") 'simulate-st-goto-home)
 (global-set-key [home] 'simulate-st-goto-home)
 
+
 ;; Remap M-x to C-x C-m so the left hand won't die after two days of real work:
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (global-set-key (kbd "C-c C-m") 'execute-extended-command) ; fallback for fast-typing.
+
 
 ;; Create (C)Tags (requires Exuberant CTags in <PATH>):
 (defun make-ctags ()
@@ -225,6 +253,7 @@
   yasnippet         ; easy snippet handling
   sr-speedbar       ; sidebar as a buffer
   znc               ; ZNC for ERC
+  mmm-mode          ; multiple major modes
   todotxt           ; todo.txt support
 
   ; color themes:
@@ -327,7 +356,13 @@
 
 
 ;; ERC config:
-(load-file "~/.erc.userdata.el") ; don't expose my ZNC accounts to github :)
+(load-file "~/.erc.userdata.el")         ; don't expose my ZNC accounts to github :)
+
+
+;; Enable multiple modes:
+(require 'mmm-auto)                      ; requires the mmm-mode package.
+(setq mmm-global-mode 'maybe)
+(mmm-add-mode-ext-class 'html-mode "\\.php\\'" 'html-php)
 
 
 ;; Change colors:
