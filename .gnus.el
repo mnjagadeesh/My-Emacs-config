@@ -50,6 +50,10 @@
       ; inspired by http://www.sopos.org/olli/?gnus
       gnus-group-line-format "%M\%S\%p\%P\%5y: %(%-40,40G%)\n"
 
+      ; better topic lines too, similar to group lines but with neat brackets around the topic names
+      ; inspired by http://ichimusai.org/pub/dot-gnus
+      gnus-topic-line-format "%i %A: [%(%{%n%}%) %v]\n"
+
       gnus-message-archive-group  nil  ; Don't use archiving
       gnus-outgoing-message-group nil) ; Don't save outgoing messages
 
@@ -65,6 +69,7 @@
 (gnus-demon-add-handler 'gnus-demon-scan-news 2 t) ; grab new news every 2 minutes
 
 (add-hook 'gnus-article-display-hook 'gnus-article-highlight-citation t) ; highlight quotes
+(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)                        ; use topic separation in the Group overview
 
 ;; don't keep Gnus alive on shutdown
 (defadvice gnus-demon-scan-news (around gnus-demon-timeout activate) "Timeout for Gnus." (with-timeout (120 (message "Gnus timed out.")) ad-do-it))
