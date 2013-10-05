@@ -52,7 +52,6 @@
 
 
 ;; Make Emacs FUCKING USE SANE ENCODINGS:
-(set-language-environment 'utf-8-unix)
 (setq locale-coding-system 'utf-8-unix)
 (set-default-coding-systems 'utf-8-unix)
 (set-terminal-coding-system 'utf-8-unix)
