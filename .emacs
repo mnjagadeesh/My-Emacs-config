@@ -17,7 +17,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
+ 
 
 ;; //////////////////////////////
 
@@ -252,15 +252,15 @@
   yasnippet         ; easy snippet handling
   sr-speedbar       ; sidebar as a buffer
   znc               ; ZNC for ERC
-  mmm-mode          ; multiple major modes
   todotxt           ; todo.txt support
+  ;auctex           ; LaTeX support (disabled for now)
 
   ; color themes:
   zenburn-theme     ; most eye-pleasant coding theme available
 
   ; no need to configure here:
+  markdown-mode     ; Markdown support
   php-mode          ; PHP support
-  ahg               ; Mercurial support
 
   ; Gnus extensions:
   bbdb              ; Big Brother database
@@ -356,21 +356,36 @@
 
 ;; ERC config:
 (load-file "~/.erc.userdata.el")         ; don't expose my ZNC accounts to github :)
+(setq erc-interpret-mirc-color t)
+(setq erc-server-coding-system '(utf-8 . utf-8))
+(setq erc-kill-buffer-on-part t)         ; Kill buffers for channels after /part
+(setq erc-kill-queries-on-quit t)        ; Kill buffers for private queries after quitting the server
+(setq erc-kill-server-buffer-on-quit t)  ; Kill buffers for server messages after quitting the server
+(setq erc-query-display 'buffer)         ; open query buffers in the current window
 
 
-;; Enable multiple modes:
-(require 'mmm-auto)                      ; requires the mmm-mode package.
-(setq mmm-global-mode 'maybe)
-(mmm-add-mode-ext-class 'html-mode "\\.php\\'" 'html-php)
+;; AUCTeX config (somehow broken; todo: guess why):
+;(if (eq system-type 'windows-nt)
+;    (progn
+;        (setq exec-path (cons (expand-file-name "C:/texlive/2013/bin/win32/") exec-path))
+;        (setq exec-path (cons (expand-file-name "C:/Program Files/gs/gs9.10/bin/") exec-path))
+;        (setq preview-gs-command "GSWIN64C.EXE")
+;        (setq preview-gs-options (quote ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
+;        (setenv "PATH" (concat "C:/texlive/2013/bin/win32;C:/Program Files/gs/gs9.10/bin;" (getenv "PATH")))))
+;(setq TeX-auto-save t)
+;(setq TeX-parse-self t)
+;(setq-default TeX-master nil)
+;(setq Info-default-directory-list
+;      (cons "c:/gnu/elisp/auctexcvs/auctex/doc" Info-default-directory-list))
+;(add-hook 'LaTeX-mode-hook 'turn-on-reftex)             ; references mode
+;(setq reftex-plug-into-AUCTeX t)                        ; references mode
+;(setq reftex-file-extensions '(("nw" "latex" "tex" ".tex" ".ltx") ("bib" ".bib")))
+;(setq TeX-file-extensions '( "nw" "latex" "tex" "sty" "cls" "ltx" "texi" "texinfo"))
+;(add-to-list 'auto-mode-alist '("\\.latex" . tex-mode)) ; auto-mode TeX files
+;(add-to-list 'auto-mode-alist '("\\.tex" . tex-mode))   ; auto-mode TeX files
+;(setq preview-image-type 'pnm)
+;(setq TeX-PDF-mode t)                                   ; DVI is for sissies
 
 
 ;; Change colors:
 (load-theme 'zenburn t)                  ; requires the zenburn-theme package.
-
-
-;; //////////////////////////////
-
-;; LASTLY, START STUFF:
-
-;; Start Gnus with Emacs:
-;(gnus)
