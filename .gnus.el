@@ -50,9 +50,9 @@
       ; inspired by http://www.sopos.org/olli/?gnus
       gnus-group-line-format "%M\%S\%p\%P\%5y: %(%-40,40G%)\n"
 
-      ; better topic lines too, similar to group lines but with neat brackets around the topic names
+      ; better topic lines too, similar to group lines
       ; inspired by http://ichimusai.org/pub/dot-gnus
-      gnus-topic-line-format "%i %A: [%(%{%n%}%) %v]\n"
+      gnus-topic-line-format "%i %A: %(%{%n%}%) %v\n"
 
       gnus-message-archive-group  nil  ; Don't use archiving
       gnus-outgoing-message-group nil) ; Don't save outgoing messages
