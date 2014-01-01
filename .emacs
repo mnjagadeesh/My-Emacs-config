@@ -249,11 +249,12 @@
   helm              ; auto-completing popup system
   smart-tab         ; tab completion and more
   dpaste_de         ; put the current buffer to the web
-  yasnippet         ; easy snippet handling
+  ;yasnippet        ; easy snippet handling (disabled for now)
   sr-speedbar       ; sidebar as a buffer
   znc               ; ZNC for ERC
   todotxt           ; todo.txt support
   ;auctex           ; LaTeX support (disabled for now)
+  emmet-mode        ; Zen Coding
 
   ; color themes:
   zenburn-theme     ; most eye-pleasant coding theme available
@@ -344,9 +345,9 @@
 (add-to-list 'auto-mode-alist '("\\todo.txt\\'" . todotxt-mode)) ; auto-mode todo.txt files
 
 
-;; Add snippets:
-(require 'yasnippet)                     ; requires the yasnippet package.
-(yas-global-mode t)
+;; Add snippets (disabled for now due to slow startup and not having used it much):
+;(require 'yasnippet)                     ; requires the yasnippet package.
+;(yas-global-mode t)
 
 
 ;; Add a neat sidebar for easier directory/project browsing:
@@ -385,6 +386,13 @@
 ;(add-to-list 'auto-mode-alist '("\\.tex" . tex-mode))   ; auto-mode TeX files
 ;(setq preview-image-type 'pnm)
 ;(setq TeX-PDF-mode t)                                   ; DVI is for sissies
+
+
+;; Emmet:
+(require 'emmet-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode)        ; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode)        ; enable Emmet's css abbreviation.
+(setq emmet-move-cursor-between-quotes t)     ; use it as "snippets"
 
 
 ;; Change colors:
