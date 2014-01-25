@@ -261,6 +261,11 @@
   ; no need to configure here:
   markdown-mode     ; Markdown support
   php-mode          ; PHP support
+  dash              ; required by helm (and probably others)
+  erc-tweet         ; ERC add-in: show tweets
+  erc-youtube       ; ERC add-in: show YT video details
+  erc-image         ; ERC add-in: inline images
+  erc-hl-nicks      ; ERC add-in: highlight nicknames
 
   ; Gnus extensions:
   bbdb              ; Big Brother database
