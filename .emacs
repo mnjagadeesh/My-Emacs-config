@@ -383,12 +383,3 @@
 
 ;; Change colors:
 (load-theme 'zenburn t)                  ; requires the zenburn-theme package.
-
-
-;; //////////////////////////////
-
-;; CHECK IF WE SHOULD BYTE-COMPILE OUR .EMACS:
-(cond
- ((file-newer-than-file-p "~/.emacs" "~/.emacs.elc")
-    (byte-compile-file "~/.emacs")
-  ))
