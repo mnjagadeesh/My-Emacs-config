@@ -213,17 +213,15 @@
   (compile "ctags -Re"))
 
 
-;; //////////////////////////////
+;; Byte-compilation of everything inside .emacs.d:
+;; (Called from the package update function)
+(defun byte-compile-init-dir ()
+  "Byte-compile all your dotfiles."
+  (interactive)
+  (byte-recompile-directory user-emacs-directory 0))
 
-;; ADDITIONS FROM NON-MELPA PACKAGES:
 
-;; nXhtml stuff (web development modes):
-;; # cd ~/.emacs.d ; git clone https://github.com/emacsmirror/nxhtml.git
-;; (Needs several fixes before being usable :-/)
-;(load-file "~/.emacs.d/nxhtml/autostart.el")
-;; Manual fixes for Emacs 24.x bugs:
-;(eval-after-load 'nxhtml '(nxhtml-toggle-visible-warnings))
-;(eval-after-load 'mumamo '(setq mumamo-per-buffer-local-vars (delq 'buffer-file-name mumamo-per-buffer-local-vars)))
+
 
 
 ;; //////////////////////////////
@@ -252,7 +250,6 @@
   sr-speedbar       ; sidebar as a buffer
   znc               ; ZNC for ERC
   todotxt           ; todo.txt support
-  ;auctex           ; LaTeX support (disabled for now)
   emmet-mode        ; Zen Coding
 
   ; color themes:
@@ -283,7 +280,8 @@
   (package-refresh-contents)
   (package-list-packages)
   (package-menu-mark-upgrades)
-  (package-menu-execute))
+  (package-menu-execute)
+  (byte-compile-init-dir))
 
 
 ;; //////////////////////////////
@@ -367,29 +365,13 @@
 (setq erc-kill-queries-on-quit t)        ; Kill buffers for private queries after quitting the server
 (setq erc-kill-server-buffer-on-quit t)  ; Kill buffers for server messages after quitting the server
 (setq erc-query-display 'buffer)         ; open query buffers in the current window
-
-
-;; AUCTeX config (somehow broken; todo: guess why):
-;(if (eq system-type 'windows-nt)
-;    (progn
-;        (setq exec-path (cons (expand-file-name "C:/texlive/2013/bin/win32/") exec-path))
-;        (setq exec-path (cons (expand-file-name "C:/Program Files/gs/gs9.10/bin/") exec-path))
-;        (setq preview-gs-command "GSWIN64C.EXE")
-;        (setq preview-gs-options (quote ("-q" "-dNOPAUSE" "-DNOPLATFONTS" "-dPrinted" "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4")))
-;        (setenv "PATH" (concat "C:/texlive/2013/bin/win32;C:/Program Files/gs/gs9.10/bin;" (getenv "PATH")))))
-;(setq TeX-auto-save t)
-;(setq TeX-parse-self t)
-;(setq-default TeX-master nil)
-;(setq Info-default-directory-list
-;      (cons "c:/gnu/elisp/auctexcvs/auctex/doc" Info-default-directory-list))
-;(add-hook 'LaTeX-mode-hook 'turn-on-reftex)             ; references mode
-;(setq reftex-plug-into-AUCTeX t)                        ; references mode
-;(setq reftex-file-extensions '(("nw" "latex" "tex" ".tex" ".ltx") ("bib" ".bib")))
-;(setq TeX-file-extensions '( "nw" "latex" "tex" "sty" "cls" "ltx" "texi" "texinfo"))
-;(add-to-list 'auto-mode-alist '("\\.latex" . tex-mode)) ; auto-mode TeX files
-;(add-to-list 'auto-mode-alist '("\\.tex" . tex-mode))   ; auto-mode TeX files
-;(setq preview-image-type 'pnm)
-;(setq TeX-PDF-mode t)                                   ; DVI is for sissies
+(setq erc-fill-function 'erc-fill-static)  ; align nicknames to the right …
+(setq erc-fill-static-center 24)           ; … with 24 characters
+;;Settings for timestamp
+(setq erc-timestamp-only-if-changed-flag nil
+          erc-timestamp-format "%H:%M "
+          erc-fill-prefix "      "
+          erc-insert-timestamp-function 'erc-insert-timestamp-left)
 
 
 ;; Emmet:
