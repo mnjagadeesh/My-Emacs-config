@@ -365,6 +365,12 @@
 (setq erc-kill-queries-on-quit t)        ; Kill buffers for private queries after quitting the server
 (setq erc-kill-server-buffer-on-quit t)  ; Kill buffers for server messages after quitting the server
 (setq erc-query-display 'buffer)         ; open query buffers in the current window
+
+; fill buffer horizontally:
+(add-hook 'window-configuration-change-hook 
+ '(lambda ()
+    (setq erc-fill-column (- (window-width) 2))))
+    
 (setq erc-fill-function 'erc-fill-static)  ; align nicknames to the right …
 (setq erc-fill-static-center 24)           ; … with 24 characters
 ;;Settings for timestamp
