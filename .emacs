@@ -422,7 +422,7 @@
 	(local-set-key (kbd "RET") 'newline-and-indent)    ; auto-indent
 	(add-hook 'local-write-file-hooks
 		(lambda ()
-			(delete-trailing-whitespace)               ; remove redundant closing whitespaces
+			(delete-trailing-whitespace)                   ; remove redundant closing whitespaces
 			nil
 		)
 	)
