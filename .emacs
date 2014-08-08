@@ -22,9 +22,6 @@
 
 ;; OWN STUFF
 
-;; Start a server so emacsclients can later just connect to this Emacs:
-(server-start)
-
 
 ;; Goodbye, menubar! Goodbye, scrollbar! Goodbye, toolbar!
 (menu-bar-mode -1)
@@ -251,6 +248,7 @@
   znc               ; ZNC for ERC
   todotxt           ; todo.txt support
   emmet-mode        ; Zen Coding
+  web-mode          ; multiple modes
 
   ; color themes:
   zenburn-theme     ; most eye-pleasant coding theme available
@@ -385,6 +383,55 @@
 (add-hook 'sgml-mode-hook 'emmet-mode)        ; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode)        ; enable Emmet's css abbreviation.
 (setq emmet-move-cursor-between-quotes t)     ; use it as "snippets"
+
+
+;; web-mode:
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[gj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+(setq web-mode-ac-sources-alist
+	'(("php" . (ac-source-yasnippet ac-source-php-auto-yasnippets))
+	  ("html" . (ac-source-emmet-html-aliases ac-source-emmet-html-snippets))
+	  ("css" . (ac-source-css-property ac-source-emmet-css-snippets))
+	)
+)
+(add-hook 'web-mode-before-auto-complete-hooks
+	'(lambda ()
+		(let ((web-mode-cur-language
+			(web-mode-language-at-pos)))
+			(if (string= web-mode-cur-language "php")
+				(yas-activate-extra-mode 'php-mode)
+				(yas-deactivate-extra-mode 'php-mode)
+			)
+			(if (string= web-mode-cur-language "css")
+				(setq emmet-use-css-transform t)
+				(setq emmet-use-css-transform nil)
+			)
+		)
+	)
+)
+
+(defun my-web-mode-hook ()
+	"Hooks for Web mode."
+	(setq web-mode-markup-indent-offset 2)             ; HTML markup offset
+	(setq web-mode-code-indent-offset 2)               ; JavaScript (etc.) code offset
+	(setq web-mode-enable-current-element-highlight t) ; highlight current element
+	(local-set-key (kbd "RET") 'newline-and-indent)    ; auto-indent
+	(add-hook 'local-write-file-hooks
+		(lambda ()
+			(delete-trailing-whitespace)               ; remove redundant closing whitespaces
+			nil
+		)
+	)
+)
+(add-hook 'web-mode-hook 'my-web-mode-hook)
 
 
 ;; Change colors:
