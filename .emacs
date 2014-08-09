@@ -63,6 +63,10 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 
+;; Drop the scratch info message
+(setq initial-scratch-message nil)
+
+
 ;; Enable basic syntax highlighting for "everything":
 (require 'generic-x)
 (add-to-list 'auto-mode-alist '("\\.ini\\'" . conf-mode)) ; .ini files should have conf-mode
