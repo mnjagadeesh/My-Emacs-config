@@ -27,6 +27,7 @@
 (menu-bar-mode -1)
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(when (fboundp 'horizontal-scroll-bar-mode) (horizontal-scroll-bar-mode -1))
 
 
 ;; OS-specific tweaks:
@@ -85,6 +86,17 @@
 ;; While I'd like Emacs to backup files I am working on, I would prefer them to be stored
 ;; outside the original directories so they won't pollute my file lists:
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
+
+;; Open a new buffer on C-x C-n:
+(defun add-new-empty-buffer ()
+  (interactive)
+  (let ((buf (generate-new-buffer "untitled")))
+    (switch-to-buffer buf)
+    (funcall (and initial-major-mode))
+    (setq buffer-offer-save t)))
+(setq initial-major-mode (quote text-mode))
+(global-set-key (kbd "C-x C-n") 'add-new-empty-buffer)
 
 
 ;; Indent b0rked buffers completely anew:
