@@ -262,6 +262,7 @@
   emmet-mode        ; Zen Coding
   browse-kill-ring  ; a more useful kill-ring experience
   web-mode          ; multiple modes
+  ; flycheck        ; syntax checkers (disabled for now)
 
   ; color themes:
   zenburn-theme     ; most eye-pleasant coding theme available
@@ -451,6 +452,10 @@
 	)
 )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
+
+
+;; flycheck config:
+;(add-hook 'after-init-hook #'global-flycheck-mode)
 
 
 ;; Change colors:
