@@ -260,6 +260,7 @@
   znc               ; ZNC for ERC
   todotxt           ; todo.txt support
   emmet-mode        ; Zen Coding
+  browse-kill-ring  ; a more useful kill-ring experience
   web-mode          ; multiple modes
 
   ; color themes:
@@ -395,6 +396,12 @@
 (add-hook 'sgml-mode-hook 'emmet-mode)        ; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode)        ; enable Emmet's css abbreviation.
 (setq emmet-move-cursor-between-quotes t)     ; use it as "snippets"
+
+
+;; browse-kill-ring:
+(global-set-key (kbd "M-y") 'browse-kill-ring)     ; we misuse the "normal" paste keystroke here
+(setq browse-kill-ring-highlight-current-entry t)  ; highlight entry to be inserted
+(setq browse-kill-ring-highlight-inserted-item t)  ; highlight entry just inserted
 
 
 ;; web-mode:
