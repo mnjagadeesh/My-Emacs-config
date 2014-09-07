@@ -337,7 +337,6 @@
 
 
 ;; Load helm as a horizontal split buffer (always on the right side):
-(eval-after-load "helm-regexp" '(helm-attrset 'follow 1 helm-source-moccur))
 (setq helm-display-function
       (lambda (buf)
         (split-window-horizontally)
