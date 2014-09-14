@@ -275,6 +275,7 @@
   erc-youtube       ; ERC add-in: show YT video details
   erc-image         ; ERC add-in: inline images
   erc-hl-nicks      ; ERC add-in: highlight nicknames
+  org               ; org-mode
 
   ; Gnus extensions:
   bbdb              ; Big Brother database
