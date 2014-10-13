@@ -129,6 +129,12 @@
 ;(global-visual-line-mode t)
 
 
+;; Avoid confusion in the modeline when opening multiple files of the same name:
+(require 'uniquify) 
+(setq uniquify-buffer-name-style 'post-forward
+      uniquify-separator ":")
+
+
 ;; Store current point positions between sessions
 (require 'saveplace)
 (setq-default save-place t)
