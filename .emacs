@@ -268,6 +268,7 @@
   emmet-mode        ; Zen Coding
   browse-kill-ring  ; a more useful kill-ring experience
   web-mode          ; multiple modes
+  sass-mode         ; SASS/SCSS
   ; flycheck        ; syntax checkers (disabled for now)
 
   ; color themes:
@@ -458,6 +459,11 @@
 	)
 )
 (add-hook 'web-mode-hook 'my-web-mode-hook)
+
+
+;; SASS mode:
+(require 'sass-mode)
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . sass-mode))
 
 
 ;; flycheck config:
