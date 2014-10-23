@@ -245,7 +245,7 @@
 
 ;; Add the MELPA repository:
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 (unless package-archive-contents (package-refresh-contents))
 
