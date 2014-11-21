@@ -262,7 +262,6 @@
   helm              ; auto-completing popup system
   smart-tab         ; tab completion and more
   dpaste_de         ; put the current buffer to the web
-  yasnippet         ; easy snippet handling (disabled for now)
   sr-speedbar       ; sidebar as a buffer (newer version than built-in)
   znc               ; ZNC for ERC
   todotxt           ; todo.txt support
@@ -363,11 +362,6 @@
 ;; Add todo.txt support:
 (require 'todotxt)                       ; requires the todotxt package.
 (add-to-list 'auto-mode-alist '("\\todo.txt\\'" . todotxt-mode)) ; auto-mode todo.txt files
-
-
-;; Add snippets:
-(require 'yasnippet)                     ; requires the yasnippet package.
-(yas-global-mode t)
 
 
 ;; Add a neat sidebar for easier directory/project browsing:
