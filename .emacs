@@ -8,6 +8,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(canlock-password "79c1cb743461bff207af986372e669f28bcdda1a")
  '(hl-paren-colors (quote ("orange" "yellow" "greenyellow" "green" "springgreen" "cyan" "slateblue" "magenta" "purple"))))
 
 (custom-set-faces
@@ -261,15 +262,14 @@
   helm              ; auto-completing popup system
   smart-tab         ; tab completion and more
   dpaste_de         ; put the current buffer to the web
-  ;yasnippet        ; easy snippet handling (disabled for now)
-  sr-speedbar       ; sidebar as a buffer
+  yasnippet         ; easy snippet handling (disabled for now)
+  sr-speedbar       ; sidebar as a buffer (newer version than built-in)
   znc               ; ZNC for ERC
   todotxt           ; todo.txt support
   emmet-mode        ; Zen Coding
   browse-kill-ring  ; a more useful kill-ring experience
   web-mode          ; multiple modes
-  sass-mode         ; SASS/SCSS
-  ; flycheck        ; syntax checkers (disabled for now)
+  scss-mode         ; SCSS
 
   ; color themes:
   zenburn-theme     ; most eye-pleasant coding theme available
@@ -282,7 +282,6 @@
   erc-youtube       ; ERC add-in: show YT video details
   erc-image         ; ERC add-in: inline images
   erc-hl-nicks      ; ERC add-in: highlight nicknames
-  org               ; org-mode
 
   ; Gnus extensions:
   bbdb              ; Big Brother database
@@ -366,9 +365,9 @@
 (add-to-list 'auto-mode-alist '("\\todo.txt\\'" . todotxt-mode)) ; auto-mode todo.txt files
 
 
-;; Add snippets (disabled for now due to slow startup and not having used it much):
-;(require 'yasnippet)                     ; requires the yasnippet package.
-;(yas-global-mode t)
+;; Add snippets:
+(require 'yasnippet)                     ; requires the yasnippet package.
+(yas-global-mode t)
 
 
 ;; Add a neat sidebar for easier directory/project browsing:
@@ -447,8 +446,8 @@
 
 (defun my-web-mode-hook ()
 	"Hooks for Web mode."
-	(setq web-mode-markup-indent-offset 2)             ; HTML markup offset
-	(setq web-mode-code-indent-offset 2)               ; JavaScript (etc.) code offset
+	(setq web-mode-markup-indent-offset 4)             ; HTML markup offset
+	(setq web-mode-code-indent-offset 4)               ; JavaScript (etc.) code offset
 	(setq web-mode-enable-current-element-highlight t) ; highlight current element
 	(local-set-key (kbd "RET") 'newline-and-indent)    ; auto-indent
 	(add-hook 'local-write-file-hooks
@@ -461,13 +460,10 @@
 (add-hook 'web-mode-hook 'my-web-mode-hook)
 
 
-;; SASS mode:
-(require 'sass-mode)
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . sass-mode))
-
-
-;; flycheck config:
-;(add-hook 'after-init-hook #'global-flycheck-mode)
+;; scss-mode:
+(require 'scss-mode)
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
+(setq scss-compile-at-save nil)
 
 
 ;; Change colors:
